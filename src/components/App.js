@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter,Route } from 'react-router-dom';
+import { BrowserRouter as Router, Switch , Route } from 'react-router-dom';
 import AddContact from './AddContact';
 import ContactList from './ContactList';
 import Header from './Header';
 import {uuid} from 'uuidv4';
+import ContactDetails from './ContactDetails';
 // test for git
 const App = () => {
     const LOCAL_STORAGE_KEY = "contact";
@@ -36,11 +37,35 @@ const App = () => {
 
     return (
         <div className="ui container">
+            <Router>
             <Header />
-            <AddContact addContactHandler = {addContactHandler} />
+            <Switch>
+                <Route 
+                path="/add" 
+                exact 
+                render = {(props) => (
+                    <AddContact {...props} addContactHandler = {addContactHandler} />
+                 )}
+                
+                />
+
+                <Route 
+                path="/" 
+                exact 
+                render = {(props) => (
+                    <ContactList {...props} contact={contacts}  getContactId = {removeContactHandler} />
+                )}
+               
+               />
+               <Route path="/contact/:id" component = {ContactDetails} />
+            </Switch>
+            
+            {/* <AddContact addContactHandler = {addContactHandler} />
             <ContactList contact={contacts} 
              getContactId = {removeContactHandler}
-            />
+            /> */}
+            </Router>
+            
         </div>
     )
 }
